@@ -1,12 +1,12 @@
 # Todo
 
 ## Engineering improvements
+- change clunky test cases in to python asserts
 - mypy api check when running testing
 - Python typing on variables and functions etc.
 - SnakeViz - would need package instal
 - Run unittest and mypy on run?? edit the .replit file
 - Move profiling into the main script
-- Add to github
 
 ## Feature improvements
 - Collections Library
