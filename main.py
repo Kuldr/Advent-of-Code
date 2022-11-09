@@ -3,8 +3,8 @@ import unittest
 import time
 
 # Constants
-YEAR = 2019
-DAY = 6
+YEAR = 2015
+DAY = 1
 SINGLE_DAY = False
 TESTING = False
 TEST_PREFIX = "test" #"testExample" "testReal"
