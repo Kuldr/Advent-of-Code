@@ -39,7 +39,7 @@ class tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         import importlib.resources
-        cls.inputStrEx = importlib.resources.read_text(__package__, "inputEx.txt")
+        # cls.inputStrEx = importlib.resources.read_text(__package__, "inputEx.txt")
         cls.inputStrReal = importlib.resources.read_text(__package__, "input.txt")
     
     # Example tests   
