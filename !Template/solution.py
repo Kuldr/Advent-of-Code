@@ -1,10 +1,10 @@
 # ANSWER
 def part1(inputStr):
-    return "Part 1 Not Implemented"
+    raise NotImplementedError("Part 1")
 
 # ANSWER
 def part2(inputStr):
-    return "Part 2 Not Implemented"
+    raise NotImplementedError("Part 2")
 
 # Tests ------------------------------------------
 import unittest
