@@ -3,9 +3,9 @@ import unittest
 import time
 
 # Constants
-YEAR = 2015
+YEAR = 2019
 DAY = 5
-SINGLE_DAY = True
+SINGLE_DAY = False
 TESTING = True
 TEST_PREFIX = "test" #"testExample" "testReal"
 PROFILING = False
