@@ -28,7 +28,7 @@ def intCodeCycle(pc, memory, inputs, outputs):
 		pc += 4
 	elif op == 3: # Input
 		store = intCodeParamMode(instruction[-3], pc+1, memory)
-		memory[store] = inputs[0]
+		memory[store] = inputs.pop(0)
 		pc += 2
 	elif op == 4: # Output
 		store = intCodeParamMode(instruction[-3], pc+1, memory)

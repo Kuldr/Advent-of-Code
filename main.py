@@ -4,8 +4,8 @@ import time
 
 # Constants
 YEAR = 2019
-DAY = 5
-SINGLE_DAY = False
+DAY = 7
+SINGLE_DAY = True
 TESTING = True
 TEST_PREFIX = "test" #"testExample" "testReal"
 PROFILING = False
