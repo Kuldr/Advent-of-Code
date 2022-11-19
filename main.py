@@ -4,11 +4,11 @@ import time
 
 # Constants
 YEAR = 2019
-DAY = 6
+DAY = 5
 SINGLE_DAY = False
-TESTING = False
+TESTING = True
 TEST_PREFIX = "test" #"testExample" "testReal"
-PROFILING = True
+PROFILING = False
 # PROFILING_LINES constant in mainHelper
 
 # TODO: Fix this

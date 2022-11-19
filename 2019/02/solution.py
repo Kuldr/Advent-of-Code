@@ -1,10 +1,34 @@
-# ANSWER
+# 3716293
 def part1(inputStr):
-    return "Part 1 Not Implemented"
+	from .. import intcode
 
-# ANSWER
+	memory = intcode.parseIntCode(inputStr)
+
+	noun = 12
+	verb = 2
+	
+	memory[1] = noun
+	memory[2] = verb
+
+	memory, outputs = intcode.intCodeRun(memory)
+
+	return memory[0]
+
+# 6429
 def part2(inputStr):
-    return "Part 2 Not Implemented"
+	from .. import intcode
+	from itertools import product
+	goal = 19690720
+
+	memory = intcode.parseIntCode(inputStr)
+
+	for noun, verb in product(range(100), repeat=2):
+		memory[1] = noun
+		memory[2] = verb
+
+		memoryO, outputs = intcode.intCodeRun(memory.copy())
+		if memoryO[0] == goal:
+			return 100 * noun + verb
 
 # Tests ------------------------------------------
 import unittest
@@ -12,17 +36,10 @@ class tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         import importlib.resources
-        cls.inputStrEx = importlib.resources.read_text(__package__, "inputEx.txt")
         cls.inputStrReal = importlib.resources.read_text(__package__, "input.txt")
-    
-    # Example tests   
-    def testExamplePart1(self):
-        self.assertEqual(part1(self.inputStrEx), 0)
-    def testExamplePart2(self):
-        self.assertEqual(part2(self.inputStrEx), 0)
 
     # Real Input
     def testRealPart1(self):
-        self.assertEqual(part1(self.inputStrReal), 0)
+        self.assertEqual(part1(self.inputStrReal), 3716293)
     def testRealPart2(self):
-        self.assertEqual(part2(self.inputStrReal), 0)
+        self.assertEqual(part2(self.inputStrReal), 6429)
