@@ -1,10 +1,9 @@
-# ANSWER
+# BWNCQRMDB
 def part1(inputStr):
     stackStr, movesStr = inputStr.split("\n\n")
     moves = parseMoves(movesStr) # Number | FromIndex | ToIndex
 
     stacks = parseStack(stackStr)
-    # stacks = [["Z", "N"], ["M", "C", "D"], ["P"]]
 
     for number, fromIndex, toIndex in moves:
         for _ in range(number):
@@ -16,9 +15,23 @@ def part1(inputStr):
 
     return answer
 
-# ANSWER
+# NHWZCBNBF
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    stackStr, movesStr = inputStr.split("\n\n")
+    moves = parseMoves(movesStr) # Number | FromIndex | ToIndex
+
+    stacks = parseStack(stackStr)
+
+    for number, fromIndex, toIndex in moves:
+        tempStack = stacks[fromIndex][-number:]
+        stacks[fromIndex] = stacks[fromIndex][:-number]
+        stacks[toIndex] += tempStack
+
+    answer = ""
+    for stack in stacks:
+        answer += stack[-1]
+
+    return answer
 
 def parseStack(stackStr):
     lines = stackStr.split("\n")
@@ -59,5 +72,5 @@ class tests(unittest.TestCase):
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), "BWNCQRMDB")
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), "NHWZCBNBF")
