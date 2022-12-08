@@ -1,5 +1,12 @@
 # 1644735
 def part1(inputStr):
+	directories = parseDirectories(inputStr)
+
+	directorySizes = calculateAllDirectoriesdirectories(directories)
+		
+	return sum([size for size in directorySizes.values() if size <= 100000])
+
+def parseDirectories(inputStr):
 	import re
 	regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)|(\$ cd ..)")
 	matches = re.findall(regex, inputStr)
@@ -23,12 +30,14 @@ def part1(inputStr):
 		else:
 			directoryPath.pop(-1)
 
-	# Calculate the size of each folder
+	return directories
+
+def calculateAllDirectoriesdirectories(directories):
 	directorySizes = {}
 	for dirName in directories.keys():
 		directorySizes[dirName] = directorySize(dirName, directories)
-		
-	return sum([size for size in directorySizes.values() if size <= 100000])
+
+	return directorySizes
 
 def directorySize(dirName, directories):
 	totalSize = 0
@@ -42,33 +51,9 @@ def directorySize(dirName, directories):
 
 # 1300850
 def part2(inputStr):
-	import re
-	regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)|(\$ cd ..)")
-	matches = re.findall(regex, inputStr)
+	directories = parseDirectories(inputStr)
 
-	# Parse the folder structure
-	directoryPath = []
-	directories = {}
-	for dirName, lsOutput, cdDotDot in matches:
-		if dirName != "":
-			directoryPath.append(dirName)
-			lsStructure = {}
-			for line in lsOutput.split("\n"):
-				if line != "":
-					size, name = line.split(" ")
-					if size == "dir":
-						lsStructure["-".join(directoryPath)+"-"+name] = 0
-					else:
-						lsStructure["-".join(directoryPath)+"-"+name] = int(size)
-	
-			directories["-".join(directoryPath)] = lsStructure
-		else:
-			directoryPath.pop(-1)
-
-	# Calculate the size of each folder
-	directorySizes = {}
-	for dirName in directories.keys():
-		directorySizes[dirName] = directorySize(dirName, directories)
+	directorySizes = calculateAllDirectoriesdirectories(directories)
 
 	MAX_SPACE  = 70_000_000
 	NEED_SPACE = 30_000_000
