@@ -1,44 +1,36 @@
 # 1046015 Too Low
 def part1(inputStr):
-	directoryPath = []
+	import re
+	regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)")
+	matches = re.findall(regex, inputStr)
 
-	for line in inputStr.split("\n"):
-		if line.startswith("$ cd "):
-			newDir = line[5:]
+	# Parse the folder structure
+	directories = {}
+	for dirName, lsOutput in matches:
+		# Found this out through a reddit meme before checking
+		# if dirName in directories:
+		# 	print("ARRRRGH", dirName)
+		lsStructure = {}
+		for line in lsOutput.split("\n"):
+			if line != "":
+				size, name = line.split(" ")
+				if size == "dir":
+					lsStructure[dirName+"-"+name] = 0
+				else:
+					lsStructure[name] = int(size)
 
-	# (?:\$ cd )(.*)(?:\n\$ ls)([^$]*)|(\$ cd ..)
-	
-	# import re
-	# regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)")
-	# matches = re.findall(regex, inputStr)
+		directories[dirName] = lsStructure
 
-	# # Parse the folder structure
-	# directories = {}
-	# for dirName, lsOutput in matches:
-	# 	# Found this out through a reddit meme before checking
-	# 	# if dirName in directories:
-	# 	# 	print("ARRRRGH", dirName)
-	# 	lsStructure = {}
-	# 	for line in lsOutput.split("\n"):
-	# 		if line != "":
-	# 			size, name = line.split(" ")
-	# 			if size == "dir":
-	# 				lsStructure[dirName+"-"+name] = 0
-	# 			else:
-	# 				lsStructure[name] = int(size)
+	print(directories)
 
-	# 	directories[dirName] = lsStructure
-
-	# print(directories)
-
-	# # Calculate the size of each folder
-	# directorySizes = {}
-	# for dirName in directories.keys():
-	# 	directorySizes[dirName] = directorySize(dirName, directories)
-	# 	# if (size := directorySize(dirName, directories)) <= 100000:
-	# 	# 	ansTotal += size
+	# Calculate the size of each folder
+	directorySizes = {}
+	for dirName in directories.keys():
+		directorySizes[dirName] = directorySize(dirName, directories)
+		# if (size := directorySize(dirName, directories)) <= 100000:
+		# 	ansTotal += size
 		
-	# return sum([size for size in directorySizes.values() if size <= 100000])
+	return sum([size for size in directorySizes.values() if size <= 100000])
 
 # from functools import lru_cache
 # @lru_cache(maxsize=None)

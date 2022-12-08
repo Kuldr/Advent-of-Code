@@ -4,7 +4,7 @@ import time
 
 # Constants
 YEAR = 2022
-DAY = 7
+DAY = 8
 SINGLE_DAY = True
 TESTING = True
 TEST_PREFIX = "test" #"testExample" "testReal"
