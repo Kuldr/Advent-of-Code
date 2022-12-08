@@ -1,47 +1,35 @@
-# 1046015 Too Low
+# 1644735
 def part1(inputStr):
+	import re
+	regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)|(\$ cd ..)")
+	matches = re.findall(regex, inputStr)
+
+	# Parse the folder structure
 	directoryPath = []
-
-	for line in inputStr.split("\n"):
-		if line.startswith("$ cd "):
-			newDir = line[5:]
-
-	# (?:\$ cd )(.*)(?:\n\$ ls)([^$]*)|(\$ cd ..)
+	directories = {}
+	for dirName, lsOutput, cdDotDot in matches:
+		if dirName != "":
+			directoryPath.append(dirName)
+			lsStructure = {}
+			for line in lsOutput.split("\n"):
+				if line != "":
+					size, name = line.split(" ")
+					if size == "dir":
+						lsStructure["-".join(directoryPath)+"-"+name] = 0
+					else:
+						lsStructure["-".join(directoryPath)+"-"+name] = int(size)
 	
-	# import re
-	# regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)")
-	# matches = re.findall(regex, inputStr)
+			directories["-".join(directoryPath)] = lsStructure
+		else:
+			directoryPath.pop(-1)
 
-	# # Parse the folder structure
-	# directories = {}
-	# for dirName, lsOutput in matches:
-	# 	# Found this out through a reddit meme before checking
-	# 	# if dirName in directories:
-	# 	# 	print("ARRRRGH", dirName)
-	# 	lsStructure = {}
-	# 	for line in lsOutput.split("\n"):
-	# 		if line != "":
-	# 			size, name = line.split(" ")
-	# 			if size == "dir":
-	# 				lsStructure[dirName+"-"+name] = 0
-	# 			else:
-	# 				lsStructure[name] = int(size)
-
-	# 	directories[dirName] = lsStructure
-
-	# print(directories)
-
-	# # Calculate the size of each folder
-	# directorySizes = {}
-	# for dirName in directories.keys():
-	# 	directorySizes[dirName] = directorySize(dirName, directories)
-	# 	# if (size := directorySize(dirName, directories)) <= 100000:
-	# 	# 	ansTotal += size
+	# Calculate the size of each folder
+	directorySizes = {}
+	for dirName in directories.keys():
+		directorySizes[dirName] = directorySize(dirName, directories)
 		
-	# return sum([size for size in directorySizes.values() if size <= 100000])
+	return sum([size for size in directorySizes.values() if size <= 100000])
 
-# from functools import lru_cache
-# @lru_cache(maxsize=None)
 def directorySize(dirName, directories):
 	totalSize = 0
 	for name, size in directories[dirName].items():
@@ -52,9 +40,41 @@ def directorySize(dirName, directories):
 
 	return totalSize
 
-# ANSWER
+# 1300850
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+	import re
+	regex = re.compile("(?:\$ cd )(.*)(?:\n\$ ls)([^$]*)|(\$ cd ..)")
+	matches = re.findall(regex, inputStr)
+
+	# Parse the folder structure
+	directoryPath = []
+	directories = {}
+	for dirName, lsOutput, cdDotDot in matches:
+		if dirName != "":
+			directoryPath.append(dirName)
+			lsStructure = {}
+			for line in lsOutput.split("\n"):
+				if line != "":
+					size, name = line.split(" ")
+					if size == "dir":
+						lsStructure["-".join(directoryPath)+"-"+name] = 0
+					else:
+						lsStructure["-".join(directoryPath)+"-"+name] = int(size)
+	
+			directories["-".join(directoryPath)] = lsStructure
+		else:
+			directoryPath.pop(-1)
+
+	# Calculate the size of each folder
+	directorySizes = {}
+	for dirName in directories.keys():
+		directorySizes[dirName] = directorySize(dirName, directories)
+
+	MAX_SPACE  = 70_000_000
+	NEED_SPACE = 30_000_000
+	minNeeded = NEED_SPACE - (MAX_SPACE - directorySizes["/"])
+
+	return sorted([size for size in directorySizes.values() if size >= minNeeded])[0]
 
 # Tests ------------------------------------------
 import unittest
@@ -71,11 +91,11 @@ class tests(unittest.TestCase):
 		self.assertEqual(part1(self.inputStrEx), 95437)
 	def testExample2Part1(self):
 		self.assertEqual(part1(self.inputStrEx2), 95437)
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx), 0)
+	def testExamplePart2(self):
+		self.assertEqual(part2(self.inputStrEx), 24933642)
 
     # Real Input
-    # def testRealPart1(self):
-    #     self.assertEqual(part1(self.inputStrReal), 0)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+	def testRealPart1(self):
+		self.assertEqual(part1(self.inputStrReal), 1644735)
+	def testRealPart2(self):
+		self.assertEqual(part2(self.inputStrReal), 1300850)
