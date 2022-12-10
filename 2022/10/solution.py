@@ -28,14 +28,14 @@ def part2(inputStr):
             cycle, crt = runCyclePart2(cycle, crt, registerX)
         cycle, crt = runCyclePart2(cycle, crt, registerX)
         registerX += operand
-        
+
     return crt
 
 def runCyclePart2(cycle, crt, registerX):
     if (registerX - 1) == cycle or (registerX) == cycle or (registerX + 1) == cycle:
-        crt += "⬛"
-    else:
         crt += "⬜"
+    else:
+        crt += "⬛"
     
     cycle += 1
     if cycle % 40 == 0:
@@ -71,12 +71,12 @@ class tests(unittest.TestCase):
         self.assertEqual(part1(self.inputStrEx), 13140)
     def testExamplePart2(self):
         self.assertEqual(part2(self.inputStrEx), """
-⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜
-⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜
-⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜
-⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜
-⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛
-⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛
+⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛
+⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛
+⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛
+⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛
 """)
 
     # Real Input
@@ -84,12 +84,12 @@ class tests(unittest.TestCase):
         self.assertEqual(part1(self.inputStrReal), 14780)
     def testRealPart2STR(self):
         self.assertEqual(part2(self.inputStrReal), """
-⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜
-⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬛⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜
-⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜⬛⬜⬜⬛⬜⬜⬜⬜⬜⬜⬛⬜⬜⬛⬜⬜⬜⬜
-⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬜⬛⬜⬜⬜⬛⬜⬛⬛⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬜
-⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜
-⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬜⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜
+⬜⬜⬜⬜⬛⬜⬛⬛⬛⬛⬜⬜⬜⬛⬛⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬜⬜⬛⬜⬛⬛⬛⬛
+⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬛⬛⬛⬜⬛⬜⬛⬛⬜⬛⬛⬛⬛⬜⬛⬜⬛⬛⬛⬛
+⬜⬜⬜⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬛⬛⬜⬛⬛⬜⬛⬛⬛⬛⬛⬛⬜⬛⬛⬜⬛⬛⬛⬛
+⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬜⬜⬛⬛⬜⬛⬛⬛⬛⬛⬜⬛⬛⬛⬜⬛⬜⬜⬛⬛⬜⬛⬛⬛⬜⬛⬛⬛⬛
+⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛
+⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬛⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛
 """)
     def testRealPart2(self):
         self.assertEqual(part2(self.inputStrReal), "ELPLZGZL")
