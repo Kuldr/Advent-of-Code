@@ -6,46 +6,44 @@ def part1(inputStr):
     signalStrengths = []
     for opCode, operand in instructions:
         if opCode == "addx":
-            if (cycle+20) % 40 == 0:
-                signalStrengths.append(cycle*registerX)
-            cycle += 1
-        if (cycle+20) % 40 == 0:
-            signalStrengths.append(cycle*registerX)
+            cycle = runCyclePart1(cycle, signalStrengths, registerX)
+        cycle = runCyclePart1(cycle, signalStrengths, registerX)
         registerX += operand
-        cycle += 1
 
     return sum(signalStrengths)
+
+def runCyclePart1(cycle, signalStrengths, registerX):
+    if (cycle+20) % 40 == 0:
+        signalStrengths.append(cycle*registerX)     
+    return cycle + 1
 
 # ANSWER
 def part2(inputStr):
     instructions = parseInstructions(inputStr)
-    "⬛"
-    "⬜"
     registerX = 1
     cycle = 0
     crt = "\n"
     for opCode, operand in instructions:
         if opCode == "addx":
-            if (registerX - 1) == cycle or (registerX) == cycle or (registerX + 1) == cycle:
-                crt += "⬛"
-            else:
-                crt += "⬜"
-            cycle += 1
-            if cycle % 40 == 0:
-                crt += "\n"
-                cycle = 0
-        if (registerX - 1) == cycle or (registerX) == cycle or (registerX + 1) == cycle:
-            crt += "⬛"
-        else:
-            crt += "⬜"
+            cycle, crt = runCyclePart2(cycle, crt, registerX)
+        cycle, crt = runCyclePart2(cycle, crt, registerX)
         registerX += operand
-        cycle += 1
-        if cycle % 40 == 0:
-            crt += "\n"
-            cycle = 0
 
     print(crt)
     return crt
+
+def runCyclePart2(cycle, crt, registerX):
+    if (registerX - 1) == cycle or (registerX) == cycle or (registerX + 1) == cycle:
+        crt += "⬛"
+    else:
+        crt += "⬜"
+    
+    cycle += 1
+    if cycle % 40 == 0:
+        crt += "\n"
+        cycle = 0
+
+    return cycle, crt
 
 def parseInstructions(inputStr):
     instructions = []
