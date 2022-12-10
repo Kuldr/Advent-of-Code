@@ -17,7 +17,7 @@ def runCyclePart1(cycle, signalStrengths, registerX):
         signalStrengths.append(cycle*registerX)     
     return cycle + 1
 
-# ANSWER
+# ELPLZGZL
 def part2(inputStr):
     instructions = parseInstructions(inputStr)
     registerX = 1
@@ -28,8 +28,7 @@ def part2(inputStr):
             cycle, crt = runCyclePart2(cycle, crt, registerX)
         cycle, crt = runCyclePart2(cycle, crt, registerX)
         registerX += operand
-
-    print(crt)
+        
     return crt
 
 def runCyclePart2(cycle, crt, registerX):
@@ -71,10 +70,26 @@ class tests(unittest.TestCase):
     def testExamplePart1(self):
         self.assertEqual(part1(self.inputStrEx), 13140)
     def testExamplePart2(self):
-        self.assertEqual(part2(self.inputStrEx), 0)
+        self.assertEqual(part2(self.inputStrEx), """
+⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬜
+⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜
+⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜
+⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜
+⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛
+⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜
+""")
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 14780)
+    def testRealPart2STR(self):
+        self.assertEqual(part2(self.inputStrReal), """
+⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬛⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜
+⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜⬛⬜⬜⬛⬜⬜⬜⬜⬜⬜⬛⬜⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬜⬛⬜⬜⬜⬛⬜⬛⬛⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬜⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜
+""")
     def testRealPart2(self):
-        self.assertEqual(part2(self.inputStrReal), 0)
+        self.assertEqual(part2(self.inputStrReal), "ELPLZGZL")
