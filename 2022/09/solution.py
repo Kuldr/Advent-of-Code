@@ -1,31 +1,38 @@
 # 6745
 def part1(inputStr):
+	return simulateRope(inputStr, 2)
+
+# 2793
+def part2(inputStr):
+	return simulateRope(inputStr, 10)
+
+def simulateRope(inputStr, nodes):
 	commands = parseMovements(inputStr)
-	head = 0+0j
-	tail = 0+0j
-	visited = {tail}
+	knots = [0+0j] * nodes
+	visited = {knots[-1]}
 	for dir, num in commands:
 		for _ in range(num):
-			head += dir
-			diff = head-tail
-			if abs(diff) > 2**0.5:
-				if diff.real >= +1:
-					tail += 1
-				elif diff.real <= -1:
-					tail += -1
-				if diff.imag >= +1:
-					tail += 1j
-				elif diff.imag <= -1:
-					tail += -1j
+			knots[0] += dir
+			for index, coords in enumerate(zip(knots, knots[1:])):				
+				knots[index+1] = calculateNewCoord(*coords)
 
-			visited.add(tail)
+			visited.add(knots[-1])
 			
 	return len(visited)
 
-# ANSWER
-def part2(inputStr):
-	commands = parseMovements(inputStr)
-    raise NotImplementedError("Part 2")
+def calculateNewCoord(prev, current):
+	diff = prev-current
+	if abs(diff) > 2**0.5:
+		if diff.real >= +1:
+			current += 1
+		elif diff.real <= -1:
+			current += -1
+		if diff.imag >= +1:
+			current += 1j
+		elif diff.imag <= -1:
+			current += -1j
+			
+	return current
 
 def parseMovements(inputStr):
 	commands = []
@@ -57,5 +64,5 @@ class tests(unittest.TestCase):
     # Real Input
 	def testRealPart1(self):
 		self.assertEqual(part1(self.inputStrReal), 6745)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+	def testRealPart2(self):
+		self.assertEqual(part2(self.inputStrReal), 2793)
