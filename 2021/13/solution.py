@@ -13,7 +13,6 @@ def part2(inputStr):
 		paper = foldPaper(paper, instruction[0], instruction[1])
 
 	paperStr = stringPaper(paper)
-	printPaper(paperStr)
 
 	return paperStr
 
@@ -62,13 +61,10 @@ def foldPaper(paper, axis, value):
 
 	return newPaper
 
-def printPaper(paperStr):
-	print("\n" + paperStr)
-
 def stringPaper(paper):
 	maxX = max(map(lambda x: x[0], paper))
 	maxY = max(map(lambda x: x[1], paper))
-	finalString = ""
+	finalString = "\n"
 	for y in range(maxY+1):
 		for x in range(maxX+1):
 			if (x, y) in paper:
@@ -91,11 +87,25 @@ class tests(unittest.TestCase):
 	def testExamplePart1(self):
 		self.assertEqual(part1(self.inputStrEx), 17)
 	def testExamplePart2(self):
-		self.assertEqual(part2(self.inputStrEx),
-		"⬜⬜⬜⬜⬜\n⬜⬛⬛⬛⬜\n⬜⬛⬛⬛⬜\n⬜⬛⬛⬛⬜\n⬜⬜⬜⬜⬜")
+		self.assertEqual(part2(self.inputStrEx), """
+⬜⬜⬜⬜⬜
+⬜⬛⬛⬛⬜
+⬜⬛⬛⬛⬜
+⬜⬛⬛⬛⬜
+⬜⬜⬜⬜⬜
+""")
 
     # Real Input
 	def testRealPart1(self):
 		self.assertEqual(part1(self.inputStrReal), 689)
+	def testRealPart2STR(self):
+		self.assertEqual(part2(self.inputStrReal), """
+⬜⬜⬜⬛⬛⬜⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬛⬛⬛⬛⬜⬜⬛⬛⬜⬜⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜
+⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬜⬛⬛⬛⬛⬜⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜
+⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬜⬜⬜⬛⬛⬜⬛⬛⬛⬛⬛⬛⬛⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜
+⬜⬜⬜⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬛⬛⬛⬜⬛⬜⬛⬜⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜
+⬜⬛⬜⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬜⬛⬜⬛⬛⬜⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬜
+⬜⬛⬛⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜⬛⬛⬛⬜⬜⬛⬛⬛⬜⬜⬛⬛⬛⬜⬜⬜⬛⬜⬜⬜⬜⬛⬛⬜⬜⬛
+""")
 	def testRealPart2(self):
 		self.assertEqual(part2(self.inputStrReal), "RLBCJGLU")
