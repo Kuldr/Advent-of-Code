@@ -4,8 +4,8 @@ import time
 import mainHelper as mh
 
 # Constants
-YEAR = 2022
-DAY = 9
+YEAR = 2023
+DAY = 1
 SINGLE_DAY = True
 TESTING = True
 TEST_PREFIX = "test" #"testExample" "testReal"
