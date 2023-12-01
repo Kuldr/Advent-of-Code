@@ -6,12 +6,13 @@ def part1(inputStr):
 
     return sum([int(word[0]) * 10 + int(word[-1]) for word in words])
 
-# 53432 too low
+# 54087
 def part2(inputStr):
+    # Hacky solution for overlapping values
     import re
-    nums = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-    for digit, word in enumerate(nums):
-        inputStr = re.sub(word, str(digit+1), inputStr)
+    nums = {"one":"o1e", "two":"t2o", "three":"t3e", "four":"f4r", "five":"f5e", "six":"s6x", "seven":"s7n", "eight":"e8t", "nine":"n9e"}
+    for word, digit in nums.items():
+        inputStr = re.sub(word, str(digit), inputStr)
 
     print(inputStr)
 
@@ -42,5 +43,5 @@ class tests(unittest.TestCase):
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 54708)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 54087)
