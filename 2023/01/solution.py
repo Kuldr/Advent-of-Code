@@ -14,8 +14,6 @@ def part2(inputStr):
     for word, digit in nums.items():
         inputStr = re.sub(word, str(digit), inputStr)
 
-    print(inputStr)
-
     import string
     table = str.maketrans('', '', string.ascii_lowercase)
     words = inputStr.translate(table).split("\n")
