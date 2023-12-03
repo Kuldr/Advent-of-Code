@@ -12,9 +12,23 @@ def part1(inputStr):
 
     return partTotal
 
-# ANSWER
+# 81296995
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    from math import prod
+    numberCoords = parseNumbers(inputStr)
+    symbolCoords = parseSymbols(inputStr)
+
+    gearTotal = 0
+    for symbolCoord, symbol in symbolCoords.items():
+        if symbol == "*":
+            currentParts = set()
+            for offset in [-1-1j,-1,-1+1j,-1j,+1j,+1-1j,+1,+1+1j]:
+                currentParts.add(numberCoords[symbolCoord + offset])
+            currentParts.remove(0)
+            if len(currentParts) == 2:
+                gearTotal += prod(currentParts)
+
+    return gearTotal
 
 def parseSymbols(inputStr):
     import re
@@ -56,11 +70,11 @@ class tests(unittest.TestCase):
     # Example tests   
     def testExamplePart1(self):
         self.assertEqual(part1(self.inputStrEx), 4361)
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx), 467835)
+    def testExamplePart2(self):
+        self.assertEqual(part2(self.inputStrEx), 467835)
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 517021)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 81296995)
