@@ -2,24 +2,26 @@
 def part1(inputStr):
     return sum([scratchCardPoints(cardStr) for cardStr in inputStr.split("\n")])
 
-# ANSWER
+# 10425665
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    from collections import defaultdict
+    copiesOfCard = defaultdict(lambda: 1)
+    for cardNum, cardStr in enumerate(inputStr.split("\n"), start = 1):
+        matches = scratchCardMatches(cardStr)
+        copiesOfCard[cardNum] # Hit the defaultdict at least once to set it to 1 copy
+        for x in range(1,matches+1):
+            copiesOfCard[cardNum+x] += copiesOfCard[cardNum]
+
+    return sum(copiesOfCard.values())
 
 def scratchCardPoints(cardStr):
-    _, numbersYouHave, winningNumbers = parseScratchCard(cardStr)
-    
-    # Calculate the matches
-    matches = len(numbersYouHave & winningNumbers)
+    matches = scratchCardMatches(cardStr)
     if matches == 0:
         return 0
     else:
         return 2**(matches-1)
 
-def parseScratchCard(cardStr):
-    # Find the card number
-    cardNumber = 1
-
+def scratchCardMatches(cardStr):
     # Extract the 2 strings with numbers in
     numbersYouHaveStr, winningNumbersStr = cardStr.split(": ")[1].split("|")
 
@@ -29,7 +31,7 @@ def parseScratchCard(cardStr):
     numbersYouHave = set(numbersRegex.findall(numbersYouHaveStr))
     winningNumbers = set(numbersRegex.findall(winningNumbersStr))
 
-    return cardNumber, numbersYouHave, winningNumbers
+    return len(numbersYouHave & winningNumbers)
 
 # Tests ------------------------------------------
 import unittest
@@ -49,5 +51,5 @@ class tests(unittest.TestCase):
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 21558)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 10425665)
