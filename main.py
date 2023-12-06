@@ -5,7 +5,7 @@ import mainHelper as mh
 
 # Constants
 YEAR = 2023
-DAY = 3
+DAY = 4
 SINGLE_DAY = True
 TESTING = True
 TEST_PREFIX = "test" #"testExample" "testReal"
