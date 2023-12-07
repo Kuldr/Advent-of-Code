@@ -1,4 +1,4 @@
-# ANSWER
+# 111627841
 def part1(inputStr):
     seeds, maps = parseInput(inputStr)
     answers = [seedToLocation(seed, maps) for seed in seeds]
@@ -17,8 +17,9 @@ def parseInput(inputStr):
         nextMap = {}
         for line in mapStr.split("\n")[1:]:
             destStart, srcStart, rangeLength = numbersFromString(line)
-            for x in range(rangeLength):
-                nextMap[srcStart + x] = destStart + x
+            nextMap[range(srcStart, srcStart+rangeLength)] = destStart - srcStart
+            # for x in range(rangeLength):
+            #     nextMap[srcStart + x] = destStart + x
         maps.append(nextMap)
     
     return seeds, maps
@@ -26,10 +27,10 @@ def parseInput(inputStr):
 def seedToLocation(seed, maps):
     current = seed
     for mapping in maps:
-        try:
-            current = mapping[current]
-        except KeyError:
-            current = current
+        for key, diff in mapping.items():
+            if current in key:
+                current += diff
+                break
     
     return current
     
@@ -56,6 +57,6 @@ class tests(unittest.TestCase):
 
     # Real Input
     def testRealPart1(self):
-        self.assertEqual(part1(self.inputStrReal), 0)
+        self.assertEqual(part1(self.inputStrReal), 111627841)
     # def testRealPart2(self):
     #     self.assertEqual(part2(self.inputStrReal), 0)
