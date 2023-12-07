@@ -6,7 +6,10 @@ def part1(inputStr):
 
 # ANSWER
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    seeds, maps = parseInput(inputStr)
+    seedRanges = parseSeedRanges(list(seeds))
+    answers = [seedToLocation(seed, maps) for seeds in seedRanges for seed in seeds]
+    return min(answers)
 
 def parseInput(inputStr):
     mapStrs = inputStr.split("\n\n")
@@ -18,8 +21,6 @@ def parseInput(inputStr):
         for line in mapStr.split("\n")[1:]:
             destStart, srcStart, rangeLength = numbersFromString(line)
             nextMap[range(srcStart, srcStart+rangeLength)] = destStart - srcStart
-            # for x in range(rangeLength):
-            #     nextMap[srcStart + x] = destStart + x
         maps.append(nextMap)
     
     return seeds, maps
@@ -40,6 +41,13 @@ def numbersFromString(str):
 
     return map(int, numbersRegex.findall(str))
 
+def parseSeedRanges(seeds):
+    pairs = zip(seeds[::2], seeds[1::2])
+    seedRanges = []
+    for start, length in pairs:
+        seedRanges.append(range(start, start+length))
+    return seedRanges
+
 # Tests ------------------------------------------
 import unittest
 class tests(unittest.TestCase):
@@ -52,11 +60,11 @@ class tests(unittest.TestCase):
     # Example tests   
     def testExamplePart1(self):
         self.assertEqual(part1(self.inputStrEx), 35)
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx), 0)
+    def testExamplePart2(self):
+        self.assertEqual(part2(self.inputStrEx), 46)
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 111627841)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 0)
