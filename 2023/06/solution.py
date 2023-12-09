@@ -1,27 +1,24 @@
 # 316800
 def part1(inputStr):
-    races = parseInput(inputStr)
-    waysToBeatList = []
-    for time, record in races:
-        waysToBeat = 0
-        for timeHeld in range(time+1):
-            dist = timeHeld * (time-timeHeld)
-            if dist > record:
-                waysToBeat += 1
-        waysToBeatList.append(waysToBeat)
+    import re
+    numbersRegex = re.compile(r"(\d+)")
+    nums = list(map(int, numbersRegex.findall(inputStr)))
+    races = zip(nums[:len(nums)//2], nums[len(nums)//2:])
 
     from math import prod
-    return prod(waysToBeatList)
+    return prod([waysToBeat(*race) for race in races])
 
 # ANSWER
 def part2(inputStr):
     raise NotImplementedError("Part 2")
 
-def parseInput(inputStr):
-    import re
-    numbersRegex = re.compile(r"(\d+)")
-    nums = list(map(int, numbersRegex.findall(inputStr)))
-    return zip(nums[:len(nums)//2], nums[len(nums)//2:])
+def waysToBeat(time, record):
+    count = 0
+    for timeHeld in range(time+1):
+        dist = timeHeld * (time-timeHeld)
+        if dist > record:
+            count += 1
+    return count
 
 # Tests ------------------------------------------
 import unittest
