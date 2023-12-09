@@ -6,6 +6,7 @@ def part1(inputStr):
 
 # ANSWER
 def part2(inputStr):
+    # Should work but will need to check 1945168946 seeds :(
     seeds, maps = parseInput(inputStr)
     seedRanges = parseSeedRanges(seeds)
     answers = [seedRangeToMinLocation(seedRange, maps) for seedRange in seedRanges]
