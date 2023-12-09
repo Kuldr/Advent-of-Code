@@ -1,14 +1,18 @@
 # 248105065
 def part1(inputStr):
     hands = parseInput(inputStr)
-    from functools import cmp_to_key
+    from functools import cmp_to_key, partial
+    CARD_ORDER = list(reversed(["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]))
+    compareHandsPart1 = partial(genericCompareHands, getHandType = getHandTypePart1, cardOrder = CARD_ORDER)
     hands = sorted(hands, key=cmp_to_key(compareHandsPart1))
     return sum([i*hand[1] for i, hand in enumerate(hands, start = 1)])
 
 # 249515436
 def part2(inputStr):
     hands = parseInput(inputStr)
-    from functools import cmp_to_key
+    from functools import cmp_to_key, partial
+    CARD_ORDER = list(reversed(["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]))
+    compareHandsPart2 = partial(genericCompareHands, getHandType = getHandTypePart2, cardOrder = CARD_ORDER)
     hands = sorted(hands, key=cmp_to_key(compareHandsPart2))
     return sum([i*hand[1] for i, hand in enumerate(hands, start = 1)])
 
@@ -82,14 +86,6 @@ def getHandTypePart2(handStr):
         return 2 # One Pair
     else:
         return 1
-
-def compareHandsPart1(hand1, hand2):
-    CARD_ORDER = list(reversed(["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]))
-    return genericCompareHands(hand1, hand2, CARD_ORDER, getHandTypePart1)
-
-def compareHandsPart2(hand1, hand2):
-    CARD_ORDER = list(reversed(["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]))
-    return genericCompareHands(hand1, hand2, CARD_ORDER, getHandTypePart2)
 
 # Tests ------------------------------------------
 import unittest
