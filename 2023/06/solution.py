@@ -8,13 +8,21 @@ def part1(inputStr):
     from math import prod
     return prod([waysToBeat(*race) for race in races])
 
-# ANSWER
+# 45647654
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    import re
+    numbersRegex = re.compile(r"(\d+)")
+    nums = numbersRegex.findall(inputStr)
+
+    time = int("".join(nums[:len(nums)//2]))
+    record = int("".join(nums[len(nums)//2:]))
+
+    return waysToBeat(time, record)
+    
 
 def waysToBeat(time, record):
     count = 0
-    for timeHeld in range(time+1):
+    for timeHeld in range((time+1)):
         dist = timeHeld * (time-timeHeld)
         if dist > record:
             count += 1
@@ -32,11 +40,11 @@ class tests(unittest.TestCase):
     # Example tests   
     def testExamplePart1(self):
         self.assertEqual(part1(self.inputStrEx), 288)
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx), 0)
+    def testExamplePart2(self):
+        self.assertEqual(part2(self.inputStrEx), 71503)
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 316800)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 45647654)
