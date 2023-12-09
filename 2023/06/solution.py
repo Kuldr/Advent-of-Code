@@ -19,14 +19,18 @@ def part2(inputStr):
 
     return waysToBeat(time, record)
     
-
 def waysToBeat(time, record):
     count = 0
-    for timeHeld in range((time+1)):
+    for timeHeld in range(possiblities := time+1):
         dist = timeHeld * (time-timeHeld)
-        if dist > record:
+        if dist <= record:
             count += 1
-    return count
+        else:
+            break
+    
+    # distances that beat is possiblities - distances that fail
+    # But the times are a semetric curve so just calculate 1 end
+    return possiblities - (count*2)
 
 # Tests ------------------------------------------
 import unittest
