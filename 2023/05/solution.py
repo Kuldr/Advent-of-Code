@@ -7,8 +7,8 @@ def part1(inputStr):
 # ANSWER
 def part2(inputStr):
     seeds, maps = parseInput(inputStr)
-    seedRanges = parseSeedRanges(list(seeds))
-    answers = [seedToLocation(seed, maps) for seeds in seedRanges for seed in seeds]
+    seedRanges = parseSeedRanges(seeds)
+    answers = [seedRangeToMinLocation(seedRange, maps) for seedRange in seedRanges]
     return min(answers)
 
 def parseInput(inputStr):
@@ -34,6 +34,11 @@ def seedToLocation(seed, maps):
                 break
     
     return current
+
+def seedRangeToMinLocation(seedRange, maps):
+    # Will need to consider the extreme values of the ranges and how they overlap with ranges in the map
+    
+    pass
     
 def numbersFromString(str):
     import re
@@ -42,6 +47,7 @@ def numbersFromString(str):
     return map(int, numbersRegex.findall(str))
 
 def parseSeedRanges(seeds):
+    seeds = list(seeds)
     pairs = zip(seeds[::2], seeds[1::2])
     seedRanges = []
     for start, length in pairs:
