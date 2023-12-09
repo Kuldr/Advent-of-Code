@@ -18,109 +18,78 @@ def parseInput(inputStr):
     hands = list(map(lambda x: (x[0], int(x[1])), hands))    
     return hands
 
-def compareHandsPart1(hand1, hand2):
+def genericCompareHands(hand1, hand2, cardOrder, getHandType):
     # -1 if hand1 <  hand2
     #  0 if hand1 == hand2
     #  1 if hand1 >  hand2
-
-    CARD_ORDER = list(reversed(["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]))
-
-    # getHandType Local to function to allow seperate getHandType for Part 2
-    def getHandType(handStr):
-        from collections import Counter
-        handCounter = Counter(handStr).most_common()
-
-        if handCounter[0][1] == 5:
-            return 7 # Five of a Kind
-        elif handCounter[0][1] == 4:
-            return 6 # Four of a Kind
-        elif handCounter[0][1] == 3 and handCounter[1][1] == 2:
-            return 5 # Full House
-        elif handCounter[0][1] == 3:
-            return 4 # Three of a Kind
-        elif handCounter[0][1] == 2 and handCounter[1][1] == 2:
-            return 3 # Two Pairs
-        elif handCounter[0][1] == 2:
-            return 2 # One Pair
-        else:
-            return 1
-
     hand1Str, hand2Str = hand1[0], hand2[0]
 
     hand1Type = getHandType(hand1Str)
     hand2Type = getHandType(hand2Str)
     # Check type of hand first
     if hand1Type > hand2Type:
-        result = 1
+        return 1
     elif hand1Type < hand2Type:
-        result = -1
+        return -1
     else:
         # Hands are equal type
-        result = 0 # Assume this will never happen but in for completeness sake
         for c1, c2 in zip(hand1Str, hand2Str):
-            if CARD_ORDER.index(c1) > CARD_ORDER.index(c2):
-                result = 1
-                break
-            elif CARD_ORDER.index(c1) < CARD_ORDER.index(c2):
-                result = -1
-                break
-        
-    return result
+            if cardOrder.index(c1) > cardOrder.index(c2):
+                return 1
+            elif cardOrder.index(c1) < cardOrder.index(c2):
+                return -1
+
+def getHandTypePart1(handStr):
+    from collections import Counter
+    handCounter = Counter(handStr).most_common()
+
+    if handCounter[0][1] == 5:
+        return 7 # Five of a Kind
+    elif handCounter[0][1] == 4:
+        return 6 # Four of a Kind
+    elif handCounter[0][1] == 3 and handCounter[1][1] == 2:
+        return 5 # Full House
+    elif handCounter[0][1] == 3:
+        return 4 # Three of a Kind
+    elif handCounter[0][1] == 2 and handCounter[1][1] == 2:
+        return 3 # Two Pairs
+    elif handCounter[0][1] == 2:
+        return 2 # One Pair
+    else:
+        return 1
+
+def getHandTypePart2(handStr):
+    from collections import Counter
+    handCounter = Counter(handStr)
+    jokers = handCounter["J"]
+    handCounter = handCounter.most_common()
+    if jokers != 0:
+        handCounter.remove(("J", jokers))
+
+    if jokers == 5 or handCounter[0][1] + jokers == 5:
+        return 7 # Five of a Kind
+    elif handCounter[0][1] + jokers == 4:
+        return 6 # Four of a Kind
+    elif handCounter[0][1] + jokers == 3 and handCounter[1][1] == 2 \
+            or handCounter[0][1] == 3 and handCounter[1][1] + jokers == 2:
+        return 5 # Full House
+    elif handCounter[0][1] + jokers == 3:
+        return 4 # Three of a Kind
+    elif handCounter[0][1] + jokers == 2 and handCounter[1][1] == 2 \
+            or handCounter[0][1] == 2 and handCounter[1][1] + jokers == 2:
+        return 3 # Two Pairs
+    elif handCounter[0][1] + jokers == 2:
+        return 2 # One Pair
+    else:
+        return 1
+
+def compareHandsPart1(hand1, hand2):
+    CARD_ORDER = list(reversed(["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]))
+    return genericCompareHands(hand1, hand2, CARD_ORDER, getHandTypePart1)
 
 def compareHandsPart2(hand1, hand2):
-    # -1 if hand1 <  hand2
-    #  0 if hand1 == hand2
-    #  1 if hand1 >  hand2
-
     CARD_ORDER = list(reversed(["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]))
-
-    # getHandType Local to function to allow seperate getHandType for Part 2
-    def getHandType(handStr):
-        from collections import Counter
-        handCounter = Counter(handStr)
-        jokers = handCounter["J"]
-        handCounter = handCounter.most_common()
-        if jokers != 0:
-            handCounter.remove(("J", jokers))
-
-        if jokers == 5 or handCounter[0][1] + jokers == 5:
-            return 7 # Five of a Kind
-        elif handCounter[0][1] + jokers == 4:
-            return 6 # Four of a Kind
-        elif handCounter[0][1] + jokers == 3 and handCounter[1][1] == 2 \
-                or handCounter[0][1] == 3 and handCounter[1][1] + jokers == 2:
-            return 5 # Full House
-        elif handCounter[0][1] + jokers == 3:
-            return 4 # Three of a Kind
-        elif handCounter[0][1] + jokers == 2 and handCounter[1][1] == 2 \
-                or handCounter[0][1] == 2 and handCounter[1][1] + jokers == 2:
-            return 3 # Two Pairs
-        elif handCounter[0][1] + jokers == 2:
-            return 2 # One Pair
-        else:
-            return 1
-
-    hand1Str, hand2Str = hand1[0], hand2[0]
-
-    hand1Type = getHandType(hand1Str)
-    hand2Type = getHandType(hand2Str)
-    # Check type of hand first
-    if hand1Type > hand2Type:
-        result = 1
-    elif hand1Type < hand2Type:
-        result = -1
-    else:
-        # Hands are equal type
-        result = 0 # Assume this will never happen but in for completeness sake
-        for c1, c2 in zip(hand1Str, hand2Str):
-            if CARD_ORDER.index(c1) > CARD_ORDER.index(c2):
-                result = 1
-                break
-            elif CARD_ORDER.index(c1) < CARD_ORDER.index(c2):
-                result = -1
-                break
-        
-    return result
+    return genericCompareHands(hand1, hand2, CARD_ORDER, getHandTypePart2)
 
 # Tests ------------------------------------------
 import unittest
