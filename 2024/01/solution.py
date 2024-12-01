@@ -1,24 +1,22 @@
 # 1603498
 def part1(inputStr):
     left, right = parseInput(inputStr)
+
     left = sorted(left)
     right = sorted(right)
-    diff = [abs(leftVal - rightVal) for leftVal, rightVal in zip(left, right)]
     
-    return sum(diff)
+    diffs = [abs(leftVal - rightVal) for leftVal, rightVal in zip(left, right)]
+    return sum(diffs)
 
-# ANSWER
+# 25574739
 def part2(inputStr):
     left, right = parseInput(inputStr)
 
     from collections import Counter
     rightCount = Counter(right)
 
-    result = 0
-    for leftVal in left:
-        result += leftVal * rightCount[leftVal]
-
-    return result
+    results = [leftVal * rightCount[leftVal] for leftVal in left]
+    return sum(results)
 
 def parseInput(inputStr):
     left, right = [], []
