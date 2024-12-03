@@ -11,17 +11,17 @@ def part1(inputStr):
 # 90669332
 def part2(inputStr):
     import re
-    regex =  re.compile(r"(mul)\(([\d]{1,3}),([\d]{1,3})\)|(do)\(\)|(don\'t)\(\)")
+    regex =  re.compile(r"(mul|do|don\'t)\(([\d]{0,3}),?([\d]{0,3})\)")
     results = regex.findall(inputStr)
 
     answer = 0
     enabled = True
     for match in results:
-        if match[0] and enabled: # Mul Instruction
+        if match[0] == "mul" and enabled:
             answer += int(match[1]) * int(match[2])
-        elif match[3]: # Do Instruction
+        elif match[0] == "do":
             enabled = True
-        elif match[4]: # Don't Instruction
+        elif match[0] == "don't":
             enabled = False
 
     return answer
