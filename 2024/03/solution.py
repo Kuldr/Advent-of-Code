@@ -1,30 +1,35 @@
 # 173419328
 def part1(inputStr):
-    import re
-    regex =  re.compile(r"mul\(([\d]{1,3}),([\d]{1,3})\)")
-    results = regex.findall(inputStr)
+    results = parseInput(inputStr)
 
-    results = [int(x)*int(y) for x, y in results]
+    results = [x*y for _, x, y in results]
 
     return sum(results)
 
 # 90669332
 def part2(inputStr):
-    import re
-    regex =  re.compile(r"(mul|do|don\'t)\(([\d]{0,3}),?([\d]{0,3})\)")
-    results = regex.findall(inputStr)
+    results = parseInput(inputStr)
 
     answer = 0
     enabled = True
     for match in results:
         if match[0] == "mul" and enabled:
-            answer += int(match[1]) * int(match[2])
+            answer += match[1] * match[2]
         elif match[0] == "do":
             enabled = True
         elif match[0] == "don't":
             enabled = False
 
     return answer
+
+def parseInput(inputStr):
+    import re
+    regex =  re.compile(r"(mul|do|don\'t)\(([\d]{0,3}),?([\d]{0,3})\)")
+    results = regex.findall(inputStr)
+
+    results = [(op, int(x), int(y)) if op == "mul" else (op,0,0) for op, x, y in results ]
+
+    return results
 
 
 # Tests ------------------------------------------
