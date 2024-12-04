@@ -33,11 +33,16 @@ def parseInput(inputStr):
     return grid, x, y
 
 def getWords(grid, x, y):
+    # Optimisation to break early
+    if grid[(coord := x+y*1j)] != "X":
+        return []
+
     dirs = [-1-1j, 0-1j, 1-1j,
             -1+0j,       1+0j,
             -1+1j, 0+1j, 1+1j]
     
     words = []
+
     for dir in dirs:
         word = grid[(coord := x+y*1j)] + grid[coord+dir] + grid[coord+2*dir] + grid[coord+3*dir]
         words.append(word)
@@ -45,7 +50,10 @@ def getWords(grid, x, y):
     return words
 
 def getCross(grid, x, y):
-    coord = x+y*1j
+    # Optimisation to break early
+    if grid[(coord := x+y*1j)] != "A":
+        return []
+    
     words = [grid[coord-1-1j] + grid[coord] + grid[coord+1+1j] + grid[coord+1-1j] + grid[coord-1+1j],
              grid[coord-1-1j] + grid[coord] + grid[coord+1+1j] + grid[coord-1+1j] + grid[coord+1-1j],
              grid[coord+1+1j] + grid[coord] + grid[coord-1-1j] + grid[coord-1+1j] + grid[coord+1-1j],
