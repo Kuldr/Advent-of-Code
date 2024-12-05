@@ -48,9 +48,7 @@ def correctManual(manual, rules):
             for j, comp in enumerate(manual[i+1:]):
                 if comp not in rules[curr]:
                     exit = True
-                    temp = manual[i]
-                    manual[i] = manual[i+j+1]
-                    manual[i+j+1] = temp
+                    manual[i+j+1], manual[i] = manual[i], manual[i+j+1]
                     break
             if exit:
                 break
