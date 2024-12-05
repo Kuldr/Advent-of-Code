@@ -45,15 +45,17 @@ def checkManual(manual, rules) -> bool:
 def correctManual(manual, rules):
     from itertools import combinations
 
-    while not checkManual(manual, rules):
+    sorted = False
+    while not sorted:
+        sorted = True
         for curr, comp in combinations(manual, 2):
             if comp not in rules[curr]:
                 currIndex = manual.index(curr)
                 compIndex = manual.index(comp)
                 manual[compIndex], manual[currIndex] = manual[currIndex], manual[compIndex]
-                break
+                sorted = False
 
-    return manual       
+    return manual
 
 
 # Tests ------------------------------------------
