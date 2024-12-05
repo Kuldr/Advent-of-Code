@@ -18,11 +18,16 @@ def part2(inputStr):
 
 
 def parseInput(inputStr):
-    rules, manuals = inputStr.split("\n\n")
+    rulesStr, manuals = inputStr.split("\n\n")
+
+    from collections import defaultdict
+    rules = defaultdict(lambda : [])
 
     import re
     regex = re.compile(r"(\d{2})\|(\d{2})")
-    rules = [(int(lStr), int(rStr)) for lStr, rStr in regex.findall(rules)]
+    rulesPairs = [(int(lStr), int(rStr)) for lStr, rStr in regex.findall(rulesStr)]
+    for left, right in rulesPairs:
+        rules[left].append(right)
 
     manuals = manuals.split("\n")
     manuals = [ [int(val) for val in manual.split(",")] for manual in manuals ]
@@ -32,7 +37,7 @@ def parseInput(inputStr):
 def checkManual(manual, rules) -> bool:
     for i, curr in enumerate(manual):
         for comp in manual[i+1:]:
-            if (curr, comp) not in rules:
+            if comp not in rules[curr]:
                 return False
     return True
 
@@ -41,7 +46,7 @@ def correctManual(manual, rules):
         exit = False
         for i, curr in enumerate(manual):
             for j, comp in enumerate(manual[i+1:]):
-                if (curr, comp) not in rules:
+                if comp not in rules[curr]:
                     exit = True
                     temp = manual[i]
                     manual[i] = manual[i+j+1]
