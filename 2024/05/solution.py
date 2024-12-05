@@ -35,22 +35,22 @@ def parseInput(inputStr):
     return rules, manuals
 
 def checkManual(manual, rules) -> bool:
-    for i, curr in enumerate(manual):
-        for comp in manual[i+1:]:
-            if comp not in rules[curr]:
-                return False
+    from itertools import combinations
+
+    for curr, comp in combinations(manual, 2):
+        if comp not in rules[curr]:
+            return False
     return True
 
 def correctManual(manual, rules):
+    from itertools import combinations
+
     while not checkManual(manual, rules):
-        exit = False
-        for i, curr in enumerate(manual):
-            for j, comp in enumerate(manual[i+1:]):
-                if comp not in rules[curr]:
-                    exit = True
-                    manual[i+j+1], manual[i] = manual[i], manual[i+j+1]
-                    break
-            if exit:
+        for curr, comp in combinations(manual, 2):
+            if comp not in rules[curr]:
+                currIndex = manual.index(curr)
+                compIndex = manual.index(comp)
+                manual[compIndex], manual[currIndex] = manual[currIndex], manual[compIndex]
                 break
 
     return manual       
