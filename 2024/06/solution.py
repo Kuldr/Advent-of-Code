@@ -12,15 +12,11 @@ def part2(inputStr):
     obstacles, gaurdPos, maxX, maxY = parseInput(inputStr)
 
     _, vistedPosAndDirs = checkForLoop(obstacles, gaurdPos, maxX, maxY)
-    visitedPos = set(pos for pos, _ in vistedPosAndDirs)
-    dirs = [-1-1j, 0-1j, 1-1j,
-            -1+0j,       1+0j,
-            -1+1j, 0+1j, 1+1j]
     
-    newObstacles = set(newPos for pos in visitedPos for dir in dirs
-                       if 0 <= (newPos := pos + dir).real <= maxX and 0 <= newPos.imag <= maxY)
-    
-    # newObstacles = [x+y*1j for x in range(maxX+1) for y in range(maxY+1)]
+    # Only consider new obstacles that the gaurd could walk into
+    newObstacles = set(newPos for pos, dir in vistedPosAndDirs
+                       if 0 <= (newPos := pos + dir).real <= maxX and 0 <= newPos.imag <= maxY)  
+      
     newObstacles = newObstacles.difference(obstacles) # Remove all current obstacles to avoid dupes
     newObstacles = newObstacles.difference([gaurdPos]) # Remove gaurd position
 
