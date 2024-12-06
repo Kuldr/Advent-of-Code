@@ -7,16 +7,25 @@ def part1(inputStr):
 
     return len(visitedPos)
 
-
 # 1562
 def part2(inputStr):
     obstacles, gaurdPos, maxX, maxY = parseInput(inputStr)
 
-    newObstacles = [x+y*1j for x in range(maxX+1) for y in range(maxY+1)]
-    # Could remove gaurd position and current obstabcles from newObstacles
+    _, vistedPosAndDirs = checkForLoop(obstacles, gaurdPos, maxX, maxY)
+    visitedPos = set(pos for pos, _ in vistedPosAndDirs)
+    dirs = [-1-1j, 0-1j, 1-1j,
+            -1+0j,       1+0j,
+            -1+1j, 0+1j, 1+1j]
+    
+    newObstacles = set(newPos for pos in visitedPos for dir in dirs
+                       if 0 <= (newPos := pos + dir).real <= maxX and 0 <= newPos.imag <= maxY)
+    
+    # newObstacles = [x+y*1j for x in range(maxX+1) for y in range(maxY+1)]
+    newObstacles = newObstacles.difference(obstacles) # Remove all current obstacles to avoid dupes
+    newObstacles = newObstacles.difference([gaurdPos]) # Remove gaurd position
 
     loops = [newObstacle for newObstacle in newObstacles 
-             if checkForLoop(obstacles.union([newObstacle]), gaurdPos, maxX, maxY)]
+             if checkForLoop(obstacles.union([newObstacle]), gaurdPos, maxX, maxY)[0]]
     
     return len(loops)
 
@@ -65,5 +74,5 @@ class tests(unittest.TestCase):
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 4711)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 1562)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 1562)
