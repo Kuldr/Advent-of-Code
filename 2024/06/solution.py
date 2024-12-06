@@ -21,7 +21,7 @@ def part2(inputStr):
     newObstacles = [x+y*1j for x in range(maxX+1) for y in range(maxY+1)]
 
     loops = [newObstacle for newObstacle in newObstacles 
-             if checkForLoop(obstacles.copy(), gaurdPos, maxX, maxY, newObstacle)]
+             if checkForLoop(obstacles.union([newObstacle]), gaurdPos, maxX, maxY)]
     
     return len(loops)
 
@@ -37,10 +37,9 @@ def parseInput(inputStr):
 
     return obstacles, gaurdPos, x, y 
 
-def checkForLoop(obstacles, gaurdPos, maxX, maxY, newObstacle) -> bool:
+def checkForLoop(obstacles, gaurdPos, maxX, maxY) -> bool:
     gaurdDir = 0-1j
     visitedPosAndDir = set()
-    obstacles.add(newObstacle)
     
     while 0 <= gaurdPos.real <= maxX and 0 <= gaurdPos.imag <= maxY:
         visitedPosAndDir.add((gaurdPos, gaurdDir))
