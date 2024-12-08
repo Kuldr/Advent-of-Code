@@ -6,6 +6,9 @@ def part1(inputStr):
 def part2(inputStr):
     raise NotImplementedError("Part 2")
 
+def parseInput(inputStr):
+    raise NotImplementedError("Parse Input")
+
 # Tests ------------------------------------------
 import unittest
 class tests(unittest.TestCase):
