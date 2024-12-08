@@ -2,13 +2,13 @@
 def part1(inputStr):
     tests = parseInput(inputStr)
 
-    return sum([testOperators(target, nums, ["*", "+"]) for target, nums in tests])
+    return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+"])])
 
 # 70597497486371
 def part2(inputStr):
     tests = parseInput(inputStr)
 
-    return sum([testOperators(target, nums, ["*", "+", "||"]) for target, nums in tests])
+    return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+", "||"])])
 
 def parseInput(inputStr):
     lines = inputStr.split("\n")
@@ -34,9 +34,9 @@ def testOperators(target, nums, operators):
             elif op == "||":
                 currentResult = int( str(currentResult) + str(nums[i]) )
         if currentResult == target:
-            return target
+            return True
     
-    return 0
+    return False
 
 # Tests ------------------------------------------
 import unittest
