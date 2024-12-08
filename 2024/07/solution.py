@@ -2,13 +2,15 @@
 def part1(inputStr):
     tests = parseInput(inputStr)
 
-    return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+"])])
+    # return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+"])])
+    return sum([target for target, nums in tests if testOperatorsHeadRecursive(target, nums[1:], False, nums[0])])
 
 # 70597497486371
 def part2(inputStr):
     tests = parseInput(inputStr)
 
-    return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+", "||"])])
+    # return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+", "||"])])
+    return sum([target for target, nums in tests if testOperatorsHeadRecursive(target, nums[1:], True, nums[0])])
 
 def parseInput(inputStr):
     lines = inputStr.split("\n")
@@ -37,6 +39,21 @@ def testOperators(target, nums, operators):
             return True
     
     return False
+
+# Uses head recursion with lazy eval and if over target as search space culling
+# Could use tail recursion and work backwards for further culling
+def testOperatorsHeadRecursive(target, numsRemaining, part2, currentResult):
+    if len(numsRemaining) == 0:
+        return target == currentResult
+    elif currentResult > target:
+        return False
+    else:
+        nextNum = numsRemaining[0]
+        nextResults = [currentResult * nextNum, currentResult + nextNum]
+        if part2:
+            nextResults.append(int( str(currentResult) + str(nextNum) ))
+        
+        return any([testOperatorsHeadRecursive(target, numsRemaining[1:], part2, nextResult) for nextResult in nextResults])
 
 # Tests ------------------------------------------
 import unittest
