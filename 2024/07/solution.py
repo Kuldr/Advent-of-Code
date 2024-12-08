@@ -3,14 +3,16 @@ def part1(inputStr):
     tests = parseInput(inputStr)
 
     # return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+"])])
-    return sum([target for target, nums in tests if testOperatorsHeadRecursive(target, nums[1:], False, nums[0])])
+    # return sum([target for target, nums in tests if testOperatorsHeadRecursive(target, nums[1:], False, nums[0])])
+    return sum([target for target, nums in tests if testOperatorsTailRecursive(target, nums, False)])
 
 # 70597497486371
 def part2(inputStr):
     tests = parseInput(inputStr)
 
     # return sum([target for target, nums in tests if testOperators(target, nums, ["*", "+", "||"])])
-    return sum([target for target, nums in tests if testOperatorsHeadRecursive(target, nums[1:], True, nums[0])])
+    # return sum([target for target, nums in tests if testOperatorsHeadRecursive(target, nums[1:], True, nums[0])])
+    return sum([target for target, nums in tests if testOperatorsTailRecursive(target, nums, True)])
 
 def parseInput(inputStr):
     lines = inputStr.split("\n")
@@ -40,8 +42,6 @@ def testOperators(target, nums, operators):
     
     return False
 
-# Uses head recursion with lazy eval and if over target as search space culling
-# Could use tail recursion and work backwards for further culling
 def testOperatorsHeadRecursive(target, numsRemaining, part2, currentResult):
     if len(numsRemaining) == 0:
         return target == currentResult
@@ -54,6 +54,24 @@ def testOperatorsHeadRecursive(target, numsRemaining, part2, currentResult):
             nextResults.append(int( str(currentResult) + str(nextNum) ))
         
         return any([testOperatorsHeadRecursive(target, numsRemaining[1:], part2, nextResult) for nextResult in nextResults])
+
+def testOperatorsTailRecursive(target, numsRemaining, part2):
+    if len(numsRemaining) == 1:
+        return target == numsRemaining[0]
+    else:
+        nextTargets = []
+        nextNum = numsRemaining[-1]
+        if target % nextNum == 0: # Can only be multiply if gives whole number
+            nextTargets.append(target // nextNum)
+        if target - nextNum > 0: # Can only be add if above 0
+            nextTargets.append(target - nextNum)
+        if part2 and str(target).endswith(str(nextNum)): # Can only be concate if ends with nextNum
+            try:
+                nextTargets.append(int(str(target)[:-(len(str(nextNum)))]))
+            except: # target can just be nextNum but not the last number remaining
+                pass
+
+        return any([testOperatorsTailRecursive(nextTarget, numsRemaining[:-1], part2) for nextTarget in nextTargets])
 
 # Tests ------------------------------------------
 import unittest
