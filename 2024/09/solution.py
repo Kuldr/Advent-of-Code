@@ -6,9 +6,29 @@ def part1(inputStr):
 
     return diskBlocksCheckSum(diskBlocks)
 
-# ANSWER
+# 6377400869326
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    wholeBlocks = parseInput(inputStr)
+
+    decreasingFileID = sorted(wholeBlocks, key=lambda x: x[0] if x[0] != "." else -1, reverse=True)
+
+    for id, count in decreasingFileID:
+        if id == ".":
+            break
+
+        filePtr = wholeBlocks.index((id, count))
+
+        valid = False
+        for freePtr in range(filePtr):
+            if wholeBlocks[freePtr][0] == "." and wholeBlocks[freePtr][1] >= count:
+                valid = True
+                break
+        
+        if valid:
+            freeCount = wholeBlocks[freePtr][1]
+            wholeBlocks = wholeBlocks[:freePtr] + [(id, count), (".", freeCount-count)] + wholeBlocks[freePtr+1:filePtr] + [(".", count)] + wholeBlocks[filePtr+1:]
+
+    return diskBlocksCheckSum(wholeBlocksToArray(wholeBlocks))
 
 def parseInput(inputStr):
     wholeBlocks = []
@@ -64,11 +84,11 @@ class tests(unittest.TestCase):
                          "00...111...2...333.44.5555.6666.777.888899")
     def testExamplePart1(self):
         self.assertEqual(part1(self.inputStrEx), 1928)
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx), 2858)
+    def testExamplePart2(self):
+        self.assertEqual(part2(self.inputStrEx), 2858)
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 6341711060162)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 6377400869326)
