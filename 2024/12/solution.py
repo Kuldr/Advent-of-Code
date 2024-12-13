@@ -60,11 +60,11 @@ def fenceCost(region):
 
     return area * perimeter
 
-# Known to currently only be finding external sides but not even working for that
+# Known to currently only be finding external sides
 def fenceCostDiscount(region):
     area = len(region)
     minX, maxX = int(sorted(region, key = lambda x: x.real)[0].real), int(sorted(region, key = lambda x: x.real)[-1].real)
-    minY, maxY = int(sorted(region, key = lambda x: x.imag)[0].imag), int(sorted(region, key = lambda x: x.real)[-1].imag)
+    minY, maxY = int(sorted(region, key = lambda x: x.imag)[0].imag), int(sorted(region, key = lambda x: x.imag)[-1].imag)
 
     # | sides
     lCoords = []
