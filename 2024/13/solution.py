@@ -3,7 +3,8 @@ def part1(inputStr):
     machines = parseInput(inputStr)
 
     # return bruteForceSolve(machines, 100)
-    return sum([bruteForceSolve(machine, 100) for machine in machines])
+    # return sum([bruteForceSolve(machine, 100) for machine in machines])
+    return sum([mathSolve(machine) for machine in machines])
 
 # ANSWER
 def part2(inputStr):
@@ -28,9 +29,17 @@ def bruteForceSolve(machine, steps):
             return 3 * a + b
     
     return 0
-                break
 
-    return totalCost
+def mathSolve(machine):
+    (aX, aY, bX, bY, tX, tY) = machine
+    a = (tX*bY - tY*bX)/(aX*bY - aY * bX)
+    b = (tX*aY - tY*aX)/(bX*aY - bY * aX)
+
+    if a.is_integer() and b.is_integer():
+        return 3 * a + b
+    else:
+        return 0
+
 
 # Tests ------------------------------------------
 import unittest
