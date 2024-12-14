@@ -6,7 +6,7 @@ def part1(inputStr):
 
     return sum([fenceCost(region) for region in regions])
 
-# ANSWER
+# 811148
 def part2(inputStr):
     plots, maxX, maxY = parseInput(inputStr)
 
@@ -60,33 +60,97 @@ def fenceCost(region):
 
     return area * perimeter
 
-# Known to currently only be finding external sides
 def fenceCostDiscount(region):
     area = len(region)
-    minX, maxX = int(sorted(region, key = lambda x: x.real)[0].real), int(sorted(region, key = lambda x: x.real)[-1].real)
-    minY, maxY = int(sorted(region, key = lambda x: x.imag)[0].imag), int(sorted(region, key = lambda x: x.imag)[-1].imag)
+    sides = 0
 
-    # | sides
-    lCoords = []
-    rCoords = []
-    for y in range(minY, maxY+1):
-        inRow = [coord for coord in region if coord.imag == y]
-        inRow = sorted(inRow, key = lambda x: x.real)
-        lCoords.append(inRow[0].real)
-        rCoords.append(inRow[-1].real)
+    # Check Left sides
+    visited = set()
+    dir = -1 # Left
+    for coord in region:
+        if coord in visited:
+            continue
+        visited.add(coord)
 
-    # - sides
-    uCoords = []
-    dCoords = []
-    for x in range(minX, maxX+1):
-        inRow = [coord for coord in region if coord.real == x]
-        inRow = sorted(inRow, key = lambda x: x.imag)
-        uCoords.append(inRow[0].imag)
-        dCoords.append(inRow[-1].imag)
+        if coord + dir not in region:
+            sides += 1
+            # Check for side continuation
+            newCoord = coord
+            while (newCoord := newCoord + 1j) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
+            newCoord = coord
+            while (newCoord := newCoord - 1j) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
 
-    from itertools import groupby
-    removeDupes = lambda l: [g for g, _ in groupby(l)]
-    sides = len(removeDupes(lCoords)) + len(removeDupes(rCoords)) + len(removeDupes(uCoords)) + len(removeDupes(dCoords))
+    # Check Right sides
+    visited = set()
+    dir = +1 # Right
+    for coord in region:
+        if coord in visited:
+            continue
+        visited.add(coord)
+
+        if coord + dir not in region:
+            sides += 1
+            # Check for side continuation
+            newCoord = coord
+            while (newCoord := newCoord + 1j) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
+            newCoord = coord
+            while (newCoord := newCoord - 1j) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
+
+    # Check Up sides
+    visited = set()
+    dir = +1j # Up
+    for coord in region:
+        if coord in visited:
+            continue
+        visited.add(coord)
+
+        if coord + dir not in region:
+            sides += 1
+            # Check for side continuation
+            newCoord = coord
+            while (newCoord := newCoord + 1) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
+            newCoord = coord
+            while (newCoord := newCoord - 1) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
+        
+    # Check Down sides
+    visited = set()
+    dir = -1j # Down
+    for coord in region:
+        if coord in visited:
+            continue
+        visited.add(coord)
+
+        if coord + dir not in region:
+            sides += 1
+            # Check for side continuation
+            newCoord = coord
+            while (newCoord := newCoord + 1) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
+            newCoord = coord
+            while (newCoord := newCoord - 1) in region:
+                visited.add(newCoord)
+                if newCoord + dir in region:
+                    break
 
     return area * sides
 
@@ -114,12 +178,24 @@ class tests(unittest.TestCase):
     def testExample2Part2(self):
         self.assertEqual(part2(self.inputStrEx2), 436)
     def testExample3Part2(self):
-        self.assertEqual(part2(self.inputStrEx3), 368)
+        self.assertEqual(part2(self.inputStrEx3), 1206)
     def testExample4Part2(self):
-        self.assertEqual(part2(self.inputStrEx4), 1206)
+        self.assertEqual(part2(self.inputStrEx4), 368)
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 1304764)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 811148)
+
+if __name__ == "__main__":
+    import runpy
+    import os
+    import sys
+
+    # Get the path to the parent directory
+    parent_dir = os.path.dirname(os.getcwd())
+    sys.path.insert(0, os.path.join(parent_dir, 'Advent-of-Code'))
+
+    # Run the script
+    runpy.run_path("main.py")
