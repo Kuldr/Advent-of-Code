@@ -64,93 +64,27 @@ def fenceCostDiscount(region):
     area = len(region)
     sides = 0
 
-    # Check Left sides
-    visited = set()
-    dir = -1 # Left
-    for coord in region:
-        if coord in visited:
-            continue
-        visited.add(coord)
+    dirs = [(-1, +1j), (+1, +1j), (-1j, +1), (+1j, +1)]
+    for toCheck, perpendicular in dirs:
+        visited = set()
+        for coord in region:
+            if coord in visited:
+                continue
+            visited.add(coord)
 
-        if coord + dir not in region:
-            sides += 1
-            # Check for side continuation
-            newCoord = coord
-            while (newCoord := newCoord + 1j) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-            newCoord = coord
-            while (newCoord := newCoord - 1j) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-
-    # Check Right sides
-    visited = set()
-    dir = +1 # Right
-    for coord in region:
-        if coord in visited:
-            continue
-        visited.add(coord)
-
-        if coord + dir not in region:
-            sides += 1
-            # Check for side continuation
-            newCoord = coord
-            while (newCoord := newCoord + 1j) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-            newCoord = coord
-            while (newCoord := newCoord - 1j) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-
-    # Check Up sides
-    visited = set()
-    dir = +1j # Up
-    for coord in region:
-        if coord in visited:
-            continue
-        visited.add(coord)
-
-        if coord + dir not in region:
-            sides += 1
-            # Check for side continuation
-            newCoord = coord
-            while (newCoord := newCoord + 1) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-            newCoord = coord
-            while (newCoord := newCoord - 1) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-        
-    # Check Down sides
-    visited = set()
-    dir = -1j # Down
-    for coord in region:
-        if coord in visited:
-            continue
-        visited.add(coord)
-
-        if coord + dir not in region:
-            sides += 1
-            # Check for side continuation
-            newCoord = coord
-            while (newCoord := newCoord + 1) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
-            newCoord = coord
-            while (newCoord := newCoord - 1) in region:
-                visited.add(newCoord)
-                if newCoord + dir in region:
-                    break
+            if coord + toCheck not in region:
+                sides += 1
+                # Check for side continuation
+                newCoord = coord
+                while (newCoord := newCoord + perpendicular) in region:
+                    visited.add(newCoord)
+                    if newCoord + toCheck in region:
+                        break
+                newCoord = coord
+                while (newCoord := newCoord - perpendicular) in region:
+                    visited.add(newCoord)
+                    if newCoord + toCheck in region:
+                        break
 
     return area * sides
 
