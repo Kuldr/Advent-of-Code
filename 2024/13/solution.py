@@ -6,9 +6,11 @@ def part1(inputStr):
     # return sum([bruteForceSolve(machine, 100) for machine in machines])
     return sum([mathSolve(machine) for machine in machines])
 
-# ANSWER
+# 79352015273424
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    machines = parseInput(inputStr)
+
+    return sum([mathSolve(machine, 10_000_000_000_000) for machine in machines])
 
 def parseInput(inputStr):
     import re
@@ -30,13 +32,15 @@ def bruteForceSolve(machine, steps):
     
     return 0
 
-def mathSolve(machine):
+def mathSolve(machine, tOffset = 0):
     (aX, aY, bX, bY, tX, tY) = machine
+    tX += tOffset
+    tY += tOffset
     a = (tX*bY - tY*bX)/(aX*bY - aY * bX)
     b = (tX*aY - tY*aX)/(bX*aY - bY * aX)
 
     if a.is_integer() and b.is_integer():
-        return 3 * a + b
+        return 3 * int(a) + int(b)
     else:
         return 0
 
@@ -57,8 +61,8 @@ class tests(unittest.TestCase):
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 36954)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 79352015273424)
 
 if __name__ == "__main__":
     import runpy
