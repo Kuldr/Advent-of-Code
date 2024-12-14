@@ -2,7 +2,8 @@
 def part1(inputStr):
     machines = parseInput(inputStr)
 
-    return bruteForceSolve(machines, 100)
+    # return bruteForceSolve(machines, 100)
+    return sum([bruteForceSolve(machine, 100) for machine in machines])
 
 # ANSWER
 def part2(inputStr):
@@ -18,14 +19,15 @@ def parseInput(inputStr):
 
     return machines
 
-def bruteForceSolve(machines, steps):
+def bruteForceSolve(machine, steps):
+    (aX, aY, bX, bY, targetX, targetY) = machine
     steps += 1
     from itertools import product
-    totalCost = 0
-    for (aX, aY, bX, bY, targetX, targetY) in machines:
-        for a, b in product(range(steps), repeat = 2):
-            if targetX == aX * a + bX * b and targetY == aY * a + bY * b:
-                totalCost += 3 * a + b
+    for a, b in product(range(steps), repeat = 2):
+        if targetX == aX * a + bX * b and targetY == aY * a + bY * b:
+            return 3 * a + b
+    
+    return 0
                 break
 
     return totalCost
