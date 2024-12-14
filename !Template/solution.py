@@ -1,5 +1,6 @@
 # ANSWER
 def part1(inputStr):
+    parseInput(inputStr)
     raise NotImplementedError("Part 1")
 
 # ANSWER
@@ -29,3 +30,15 @@ class tests(unittest.TestCase):
         self.assertEqual(part1(self.inputStrReal), 0)
     # def testRealPart2(self):
     #     self.assertEqual(part2(self.inputStrReal), 0)
+
+if __name__ == "__main__":
+    import runpy
+    import os
+    import sys
+
+    # Get the path to the parent directory
+    parent_dir = os.path.dirname(os.getcwd())
+    sys.path.insert(0, os.path.join(parent_dir, 'Advent-of-Code'))
+
+    # Run the script
+    runpy.run_path("main.py")
