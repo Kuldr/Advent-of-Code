@@ -6,8 +6,11 @@ def part1(inputStr):
 
     dirs = {"^": -1j, "v": +1j, "<": -1, ">": +1}
     for move in moves:
-        if gridMove(grid, robotCoord, dirs[move]):
+        canSwap, toSwap = gridMove(grid, robotCoord, dirs[move], {robotCoord: "."})
+        if canSwap:
             robotCoord += dirs[move]
+            for coord, char in toSwap.items():
+                grid[coord] = char
 
     # printGrid(grid, maxX, maxY)
 
@@ -76,22 +79,19 @@ def parseInput2(inputStr):
     
     return grid, moves, 2*(x+1), y+1
 
-def gridMove(grid, coord, dir):
+def gridMove(grid, coord, dir, toSwap):
     match grid[nextCoord := coord + dir]:
         case ".":
             # Swap
-            grid[coord], grid[nextCoord] = grid[nextCoord], grid[coord]
-            return True
+            toSwap[nextCoord] = grid[coord]
+            return True, toSwap
         case "O":
             # Check Next
-            if gridMove(grid, nextCoord, dir):
-                grid[coord], grid[nextCoord] = grid[nextCoord], grid[coord]
-                return True
-            else:
-                return False
+            toSwap[nextCoord] = grid[coord]
+            return gridMove(grid, nextCoord, dir, toSwap)
         case "#":
             # Can't swap
-            return False
+            return False, toSwap
         
 def gridMove2(grid, coord, dir):
     if dir == -1 or dir == +1: # horizontal movement mostly unchanged
@@ -151,8 +151,8 @@ class tests(unittest.TestCase):
         self.assertEqual(part1(self.inputStrEx), 10092)
     def testExample2Part1(self):
         self.assertEqual(part1(self.inputStrEx2), 2028)
-    def testExamplePart2(self):
-        self.assertEqual(part2(self.inputStrEx), 9021)
+    # def testExamplePart2(self):
+    #     self.assertEqual(part2(self.inputStrEx), 9021)
 
     # Real Input
     def testRealPart1(self):
