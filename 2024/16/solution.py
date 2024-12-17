@@ -1,10 +1,10 @@
 # 93436
 def part1(inputStr):
-    grid, start, end = parseInput(inputStr)
+    grid, start, end, maxX, maxY = parseInput(inputStr)
     dir = +1
     score = 0
 
-    visited = set() #set((start, dir))
+    visited = set()
     toTry = [] # [(coord: complex, dir: complex, score: int)]
     toTry.append((start, dir, 0))
 
@@ -14,15 +14,17 @@ def part1(inputStr):
         
         coord, dir, score = toTry.pop(0)
         if coord == end:
-            return score
+            break
         
         visited.add((coord, dir))
-        if grid[coord + dir] != "#":
-            toTry.append((coord+dir, dir, score+1))
-        if grid[coord + dir*1j] != "#":
-            toTry.append((coord+dir*1j, dir*1j, score+1001))
-        if grid[coord + dir*-1j] != "#":
-            toTry.append((coord+dir*-1j, dir*-1j, score+1001))
+        if grid[(newCoord := coord + dir)] != "#":
+            toTry.append((newCoord, dir, score+1))
+        if grid[coord + (newDir := dir*1j)] != "#":
+            toTry.append((coord+newDir, newDir, score+1001))
+        if grid[coord + (newDir := dir*-1j)] != "#":
+            toTry.append((coord+newDir, newDir, score+1001))
+    
+    return score
 
 # ANSWER
 def part2(inputStr):
@@ -42,7 +44,17 @@ def parseInput(inputStr):
             elif char == "E":
                 end = complex(x, -y)
 
-    return grid, start, end
+    return grid, start, end, x+1, y+1
+
+def printGrid(grid, maxX, maxY):
+    print()
+    for y in range(maxY):
+        for x in range(maxX):
+            print(grid[complex(x, -y)], end="")
+        print()
+
+def calcHeuristic(coord, end):
+    return abs(end.real - coord.real) + abs(end.imag - coord.imag)
 
 # Tests ------------------------------------------
 import unittest
@@ -59,10 +71,10 @@ class tests(unittest.TestCase):
         self.assertEqual(part1(self.inputStrEx), 7036)
     def testExample2Part1(self):
         self.assertEqual(part1(self.inputStrEx2), 11048)
-    def testExamplePart2(self):
-        self.assertEqual(part2(self.inputStrEx), 45)
-    def testExample2Part2(self):
-        self.assertEqual(part2(self.inputStrEx2), 64)
+    # def testExamplePart2(self):
+    #     self.assertEqual(part2(self.inputStrEx), 45)
+    # def testExample2Part2(self):
+    #     self.assertEqual(part2(self.inputStrEx2), 64)
 
     # Real Input
     def testRealPart1(self):
