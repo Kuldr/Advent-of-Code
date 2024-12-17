@@ -29,9 +29,40 @@ def part1(inputStr):
     # printGrid(grid, maxX, maxY)
     return score
 
-# ANSWER
+# 486
 def part2(inputStr):
-    raise NotImplementedError("Part 2")
+    grid, start, end, maxX, maxY = parseInput(inputStr)
+    dir = +1
+    score = 0
+    goal = part1(inputStr)
+    paths = set()
+
+    from collections import defaultdict
+    visited = defaultdict(lambda: goal)
+    toTry = [] # [(coord: complex, dir: complex, score: int, previous: [coords])]
+    toTry.append((start, dir, 0, []))
+
+    while score <= goal and toTry:
+        coord, dir, score, previous = toTry.pop(0)
+        
+        if coord == end:
+            paths.update(previous)
+        
+        visited[(coord, dir)] = score
+        if grid[(newCoord := coord + dir)] != "#":
+            toTry.append((newCoord, dir, score+1, previous + [coord]))
+        if grid[coord + (newDir := dir*1j)] != "#":
+            toTry.append((coord+newDir, newDir, score+1001, previous + [coord]))
+        if grid[coord + (newDir := dir*-1j)] != "#":
+            toTry.append((coord+newDir, newDir, score+1001, previous + [coord]))
+        
+        toTry = [(coord, dir, score, previous) for coord, dir, score, previous in toTry if score <= visited[(coord, dir)]]
+        toTry = sorted(toTry, key=lambda x: x[2]) # Sort the list by score
+    
+    # for coord in paths:
+    #     grid[coord] = "O"
+    # printGrid(grid, maxX, maxY)
+    return len(paths) + 1 # Count End tile too
 
 def parseInput(inputStr):
     start = complex(0,0)
@@ -74,16 +105,16 @@ class tests(unittest.TestCase):
         self.assertEqual(part1(self.inputStrEx), 7036)
     def testExample2Part1(self):
         self.assertEqual(part1(self.inputStrEx2), 11048)
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx), 45)
-    # def testExample2Part2(self):
-    #     self.assertEqual(part2(self.inputStrEx2), 64)
+    def testExamplePart2(self):
+        self.assertEqual(part2(self.inputStrEx), 45)
+    def testExample2Part2(self):
+        self.assertEqual(part2(self.inputStrEx2), 64)
 
     # Real Input
     def testRealPart1(self):
         self.assertEqual(part1(self.inputStrReal), 93436)
-    # def testRealPart2(self):
-    #     self.assertEqual(part2(self.inputStrReal), 0)
+    def testRealPart2(self):
+        self.assertEqual(part2(self.inputStrReal), 486)
 
 # Run Main ------------------------------------------
 if __name__ == "__main__":
