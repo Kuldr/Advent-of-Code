@@ -5,25 +5,28 @@ def part1(inputStr):
     score = 0
 
     visited = set()
-    toTry = [] # [(coord: complex, dir: complex, score: int)]
-    toTry.append((start, dir, 0))
+    toTry = [] # [(coord: complex, dir: complex, score: int, previous: [coords])]
+    toTry.append((start, dir, 0, []))
 
     while toTry:
-        toTry = [(coord, dir, score) for coord, dir, score in toTry if (coord, dir) not in visited]
+        toTry = [(coord, dir, score, previous) for coord, dir, score, previous in toTry if (coord, dir) not in visited]
         toTry = sorted(toTry, key=lambda x: x[2]) # Sort the list by score
         
-        coord, dir, score = toTry.pop(0)
+        coord, dir, score, previous = toTry.pop(0)
         if coord == end:
             break
         
         visited.add((coord, dir))
         if grid[(newCoord := coord + dir)] != "#":
-            toTry.append((newCoord, dir, score+1))
+            toTry.append((newCoord, dir, score+1, previous + [coord]))
         if grid[coord + (newDir := dir*1j)] != "#":
-            toTry.append((coord+newDir, newDir, score+1001))
+            toTry.append((coord+newDir, newDir, score+1001, previous + [coord]))
         if grid[coord + (newDir := dir*-1j)] != "#":
-            toTry.append((coord+newDir, newDir, score+1001))
+            toTry.append((coord+newDir, newDir, score+1001, previous + [coord]))
     
+    # for coord in previous:
+    #     grid[coord] = "O"
+    # printGrid(grid, maxX, maxY)
     return score
 
 # ANSWER
