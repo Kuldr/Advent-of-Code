@@ -4,25 +4,61 @@ def part1(inputStr):
 
     return runProgram(registerA, registerB, registerC, program)
 
-# ANSWER
+# 216549846240877
 def part2(inputStr):
     registerA, registerB, registerC, program = parseInput(inputStr)
     programStr = ",".join(map(str, program))
-    
     # registerA = 117440
-    printinc = 50_000
+    # printinc = 50_000
 
-    from itertools import count
-    from time import time
-    startTime = time()
-    minValue = 8**15
-    maxValue = 8**16
-    for registerA in range(minValue, maxValue): # Massive range
-        if (lastProg := runProgram(registerA, registerB, registerC, program)) == programStr:
-            return registerA
-        if registerA % printinc == 0:
-            print(f"{(percent := (registerA - minValue) / (maxValue - minValue) * 100)}% | Remaining = {((time() - startTime)/(percent/100))/60/60/24/365}")
-            print(lastProg, len(lastProg))
+    # from itertools import count
+    # from time import time
+    # startTime = time()
+    # minValue = 8**15
+    # maxValue = 216549846240878
+    # for registerA in range(minValue, maxValue): # Massive range
+    #     if (lastProg := runProgram(registerA, registerB, registerC, program)) == programStr:
+    #         return registerA
+    #     if registerA % printinc == 0:
+    #         print(f"{(percent := (registerA - minValue) / (maxValue - minValue) * 100)}% | Remaining = {((time() - startTime)/(percent/100))/60/60/24/365}")
+    #         print(lastProg, len(lastProg))
+
+
+    # registerA = 0
+    # for i in range(1,8):
+    #     ans = crackNextDigit(str(i), registerB, registerC, program, programStr)
+    #     if ans:
+    #         return ans
+
+    # return crackNextDigit("0", registerB, registerC, program, programStr)
+    
+    # Try Breadth First Search ??
+    registerA = 0
+    numChars = 1
+    lastProg = ""
+    while lastProg != programStr:
+        lastProg = runProgram(registerA, registerB, registerC, program)
+        
+        if lastProg == programStr:
+            break
+        elif programStr.endswith(lastProg[-numChars:]):
+            print(f"{numChars:02d}", oct(registerA))
+            registerA = (registerA << 3)
+            numChars += 2
+        
+        registerA +=1
+        
+    return registerA
+
+def crackNextDigit(currAOct, registerB, registerC, program, programStr):
+    for i in range(8):
+        nextAOct = currAOct + str(i)
+        resultProgStr = runProgram(int(nextAOct, 8), registerB, registerC, program)
+        if resultProgStr == programStr:
+            return int(nextAOct, 8)
+        elif programStr.endswith(resultProgStr[-len(nextAOct):]) and len(nextAOct) <= len(program):
+            print(nextAOct)
+            crackNextDigit(nextAOct, registerB, registerC, program, programStr)
         
 def parseInput(inputStr):
     import re
@@ -107,8 +143,8 @@ class tests(unittest.TestCase):
     # Example tests   
     def testExamplePart1(self):
         self.assertEqual(part1(self.inputStrEx), "4,6,3,5,6,3,5,2,1,0")
-    # def testExamplePart2(self):
-    #     self.assertEqual(part2(self.inputStrEx2), 117440)
+    def testExamplePart2(self):
+        self.assertEqual(part2(self.inputStrEx2), 117440)
 
     # Real Input
     def testRealPart1(self):
@@ -116,7 +152,7 @@ class tests(unittest.TestCase):
     def testRealPart1NOT(self):
         self.assertNotEqual(part1(self.inputStrReal), "5,6,4,2,1,2,2,1,0")
     def testRealPart2(self):
-        self.assertEqual(part2(self.inputStrReal), 0)
+        self.assertEqual(part2(self.inputStrReal), 216549846240877)
 
     # Other Test
     def testHardCodedInput(self):
