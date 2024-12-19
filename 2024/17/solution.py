@@ -84,6 +84,15 @@ def runProgram(registerA, registerB, registerC, program):
     
     return output[:-1]
 
+def hardCodedInputProgram(a):
+    output = ""
+    target = "2,4,1,3,7,5,1,5,0,3,4,1,5,5,3,0"
+
+    while a != 0:# and target.startswith(output):
+        output += str((((a%8)^3)^5)^(a // (2 ** ((a%8)^3))) % 8) + ","
+        a = a//8
+
+    return output[:-1]
 
 # Tests ------------------------------------------
 import unittest
@@ -109,6 +118,10 @@ class tests(unittest.TestCase):
     def testRealPart2(self):
         self.assertEqual(part2(self.inputStrReal), 0)
 
+    # Other Test
+    def testHardCodedInput(self):
+        self.assertEqual(hardCodedInputProgram(21539243), runProgram(*parseInput(self.inputStrReal)))
+        
 # Run Main ------------------------------------------
 if __name__ == "__main__":
     import runpy
