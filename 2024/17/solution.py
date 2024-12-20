@@ -5,26 +5,34 @@ def part1(inputStr):
     return runProgram(registerA, registerB, registerC, program)
 
 # 216549846240877
+# All valid: 234142032285375, 234142032285293, 216549846240959, 216549846240877
 def part2(inputStr):
     registerA, registerB, registerC, program = parseInput(inputStr)
     programStr = ",".join(map(str, program))
-    # registerA = 117440
-    # printinc = 50_000
 
-    # from itertools import count
-    # from time import time
-    # startTime = time()
-    # minValue = 8**15
-    # maxValue = 216549846240878
-    # for registerA in range(minValue, maxValue): # Massive range
-    #     if (lastProg := runProgram(registerA, registerB, registerC, program)) == programStr:
-    #         return registerA
-    #     if registerA % printinc == 0:
-    #         print(f"{(percent := (registerA - minValue) / (maxValue - minValue) * 100)}% | Remaining = {((time() - startTime)/(percent/100))/60/60/24/365}")
-    #         print(lastProg, len(lastProg))
+    valid = []
+    toSearch = [str(i) for i in range(0,8)]
+    searchedCount = 0
+    while toSearch:        
+        if searchedCount % 100_000 == 0:
+            print(f"{len(max(toSearch)) = }")
+            print(f"{len(toSearch) = :_}")
+            print(f"{searchedCount = :_}")
+            print(f"{valid = }")
+            
+        octStr = toSearch.pop(0)
+        searchedCount += 1
+        resultProgStr = runProgram(int(octStr, 8), registerB, registerC, program, target=programStr)
+        if resultProgStr == programStr:
+            valid.append(int(octStr, 8))
 
+        if programStr.endswith(resultProgStr[-len(octStr):]) and len(octStr) < len(program):
+            toSearch.extend([octStr + str(i) for i in range(0,8)])
+            toSearch.sort(reverse=True)
 
-    # registerA = 0
+    # print(toSearch)
+    print(f"{valid = }")
+    return sorted(valid)[0]
     # for i in range(1,8):
     #     ans = crackNextDigit(str(i), registerB, registerC, program, programStr)
     #     if ans:
@@ -33,22 +41,21 @@ def part2(inputStr):
     # return crackNextDigit("0", registerB, registerC, program, programStr)
     
     # Try Breadth First Search ??
-    registerA = 0
-    numChars = 1
-    lastProg = ""
-    while lastProg != programStr:
-        lastProg = runProgram(registerA, registerB, registerC, program)
+    # registerA = 0
+    # numChars = 1
+    # lastProg = ""
+    # while lastProg != programStr:
+    #     lastProg = runProgram(registerA, registerB, registerC, program)
+    #     if lastProg == programStr:
+    #         break
+    #     elif programStr.endswith(lastProg[-numChars:]):
+    #         print(f"{numChars:02d}", oct(registerA))
+    #         registerA = (registerA << 3)
+    #         numChars += 2
         
-        if lastProg == programStr:
-            break
-        elif programStr.endswith(lastProg[-numChars:]):
-            print(f"{numChars:02d}", oct(registerA))
-            registerA = (registerA << 3)
-            numChars += 2
+    #     registerA +=1
         
-        registerA +=1
-        
-    return registerA
+    # return registerA
 
 def crackNextDigit(currAOct, registerB, registerC, program, programStr):
     for i in range(8):
