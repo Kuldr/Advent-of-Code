@@ -7,65 +7,37 @@ def part1(inputStr):
 # 216549846240877
 # All valid: 234142032285375, 234142032285293, 216549846240959, 216549846240877
 def part2(inputStr):
-    registerA, registerB, registerC, program = parseInput(inputStr)
+    _, registerB, registerC, program = parseInput(inputStr)
     programStr = ",".join(map(str, program))
 
     valid = []
     toSearch = [str(i) for i in range(0,8)]
-    searchedCount = 0
-    while toSearch:        
-        if searchedCount % 100_000 == 0:
-            print(f"{len(max(toSearch)) = }")
-            print(f"{len(toSearch) = :_}")
-            print(f"{searchedCount = :_}")
-            print(f"{valid = }")
-            
-        octStr = toSearch.pop(0)
-        searchedCount += 1
+    for octStr in toSearch:
         resultProgStr = runProgram(int(octStr, 8), registerB, registerC, program, target=programStr)
         if resultProgStr == programStr:
             valid.append(int(octStr, 8))
 
         if programStr.endswith(resultProgStr[-len(octStr):]) and len(octStr) < len(program):
             toSearch.extend([octStr + str(i) for i in range(0,8)])
-            toSearch.sort(reverse=True)
 
-    # print(toSearch)
-    print(f"{valid = }")
     return sorted(valid)[0]
-    # for i in range(1,8):
-    #     ans = crackNextDigit(str(i), registerB, registerC, program, programStr)
-    #     if ans:
-    #         return ans
-
-    # return crackNextDigit("0", registerB, registerC, program, programStr)
     
-    # Try Breadth First Search ??
     # registerA = 0
     # numChars = 1
     # lastProg = ""
     # while lastProg != programStr:
     #     lastProg = runProgram(registerA, registerB, registerC, program)
     #     if lastProg == programStr:
-    #         break
+    #         if runProgram(registerA - 1, registerB, registerC, program) == programStr:
+    #             return registerA - 1
+    #         else:
+    #             return registerA
     #     elif programStr.endswith(lastProg[-numChars:]):
-    #         print(f"{numChars:02d}", oct(registerA))
+    #         # print(f"{numChars:02d}", oct(registerA))
     #         registerA = (registerA << 3)
     #         numChars += 2
         
     #     registerA +=1
-        
-    # return registerA
-
-def crackNextDigit(currAOct, registerB, registerC, program, programStr):
-    for i in range(8):
-        nextAOct = currAOct + str(i)
-        resultProgStr = runProgram(int(nextAOct, 8), registerB, registerC, program)
-        if resultProgStr == programStr:
-            return int(nextAOct, 8)
-        elif programStr.endswith(resultProgStr[-len(nextAOct):]) and len(nextAOct) <= len(program):
-            print(nextAOct)
-            crackNextDigit(nextAOct, registerB, registerC, program, programStr)
         
 def parseInput(inputStr):
     import re
@@ -77,11 +49,13 @@ def parseInput(inputStr):
 
     return registerA, registerB, registerC, program
 
-def runProgram(registerA, registerB, registerC, program):
+def runProgram(registerA, registerB, registerC, program, target = ""):
     instructionPtr = 0
     output = ""
     
     while instructionPtr < len(program):
+        if target and output[:-1] not in target:
+            break
         opcode = program[instructionPtr]
 
         operandLiteral = program[instructionPtr+1]
