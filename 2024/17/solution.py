@@ -28,16 +28,13 @@ def part2(inputStr):
     # while lastProg != programStr:
     #     lastProg = runProgram(registerA, registerB, registerC, program)
     #     if lastProg == programStr:
-    #         if runProgram(registerA - 1, registerB, registerC, program) == programStr:
-    #             return registerA - 1
-    #         else:
-    #             return registerA
-    #     elif programStr.endswith(lastProg[-numChars:]):
+    #         return registerA
+    #     elif programStr.endswith(lastProg[-numChars:]) and registerA != 0:
     #         # print(f"{numChars:02d}", oct(registerA))
     #         registerA = (registerA << 3)
     #         numChars += 2
-        
-    #     registerA +=1
+    #     else:
+    #         registerA +=1
         
 def parseInput(inputStr):
     import re
