@@ -1,36 +1,41 @@
 # 17193
 def part1(inputStr):
     banks = parseInput(inputStr)
-    sumBatteries = 0
-
-    from itertools import combinations
-    for bank in banks:
-        # sumBatteries += max([int(l+r) for l, r in combinations(bank, 2)])
-        sumBatteries += max([int("".join(combo)) for combo in combinations(bank, 2)])
-
-    return sumBatteries
+    return largestBatteryCombinations(banks, 2)
 
 # ANSWER
 def part2(inputStr):
     banks = parseInput(inputStr)
-    sumBatteries = 0
+    return largestBatteryCombinations(banks, 12)
 
-    # # Combinations method intractable 1.05E15 combos per bank
-    # from itertools import combinations
-    # for bank in banks:
-    #     maxBattery = 0
-    #     for combo in combinations(bank, 12):
-    #         if (newBattery := int("".join(combo))) > maxBattery:
-    #             maxBattery = newBattery
-    #     sumBatteries += maxBattery
+    # sumBatteries = 0
 
-    #     # As this builds the entire list first takes too much memory
-    #     # sumBatteries += max([int("".join(combo)) for combo in combinations(bank, 12)])
+    # import re
+    
+    # from time import time
+    # startTime = time()
 
-    return sumBatteries
+    # for i in range(111_111_111_111, 999_999_999_999):
+    #     # regex => (.*[9].*[9].*[9].*[9].*[9].*[9].*[9].*[9].*[9].*[9].*[9].*[9].*)
+    #     regex = "(.*[" + "].*[".join(str(i)) + "].*)"
+    #     if found := re.findall(regex, inputStr):
+    #         sumBatteries += i
+    #         inputStr = inputStr.replace(found[0], "")
 
 def parseInput(inputStr):
     return [line for line in inputStr.split("\n")]
+
+# Intractable for part 2 real 1.05E15 combos per bank
+def largestBatteryCombinations(banks, cells):
+    sumBatteries = 0
+
+    from itertools import combinations
+    for bank in banks:
+        # As this builds the entire list first takes too much memory
+        # Can remove the list comprehension and use combinations as iterator
+        sumBatteries += max([int("".join(combo)) for combo in combinations(bank, cells)])
+
+    return sumBatteries
 
 # Tests ------------------------------------------
 import unittest
